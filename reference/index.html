@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HAMLET: Switch your Vision-Language-Action Model into a History-Aware Policy</title>
+  <meta property="og:title" content="HAMLET: Switch your Vision-Language-Action Model into a History-Aware Policy" />
+  <meta property="og:description" content="HAMLET enables pre-trained VLAs to leverage historical information efficiently via moment tokens and a memory module." />
+  <meta property="og:image" content="resources/1_teaser.png" />
+
+  <!-- Fonts and Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href='https://fonts.googleapis.com/css?family=Titillium+Web:400,600,400italic,600italic,300,300italic' rel='stylesheet' type='text/css'>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
+  <!-- Main stylesheet reused from the reference project -->
+  <link href="style.css" rel="stylesheet" type="text/css" />
+
+  <!-- Local overrides -->
+  <style>
+    .video-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; align-items: start; }
+    .video-item video { width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); background: #000; }
+    .video-caption { text-align: center; margin-top: 6px; font-size: 0.95rem; color: #555; }
+    @media (max-width: 1024px) { .video-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px)  { .video-grid { grid-template-columns: 1fr; } }
+
+    /* Requested size and styling changes */
+    .header-text { font-size: calc(2rem * 1.2); }
+    .author-block { font-size: 24px; }
+    .tldr-section { font-size: calc(16px * 1.5); }
+    .text-container p, .instruction { font-size: 1.7rem; }
+    .video-caption { font-size: 1.9rem; }
+
+    /* Instruction callout (bold, yellow) */
+    .instruction {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 14px 0 20px;
+      padding: 12px 14px;
+      background: #fff3cd;
+      border: 1px solid #ffeeba;
+      border-left: 6px solid #d39e00;
+      border-radius: 10px;
+      color: #3a2e00;
+      font-weight: 700;
+      line-height: 1.55;
+    }
+    .instruction .instruction-label {
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: #ffe08a;
+      color: #5a4100;
+      letter-spacing: 0.2px;
+      margin-right: 6px;
+    }
+
+    /* Task callout (bold, dark green) */
+    .task-callout {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 24px;
+      margin-bottom: 12px;
+      padding: 10px 14px;
+      background: #2e7d32;         /* dark green */
+      border: 1px solid #2e7d32;
+      border-left: 6px solid #1b5e20;
+      border-radius: 10px;
+      color: #fff;
+      font-weight: 800;
+      font-size: 30px;              /* you can tweak to 28–32px */
+      line-height: 1.25;
+    }
+    .task-callout .task-badge {
+      font-weight: 900;
+      padding: 2px 10px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.18); /* subtle contrast pill */
+      color: #ffffff;
+      letter-spacing: 0.3px;
+    }
+  </style>
+</head>
+
+<body>
+  <br /><br /><br />
+  <center>
+    <span class="header-text">
+      HAMLET: Switch your Vision-Language-Action Model into a History-Aware Policy
+    </span>
+  </center>
+
+  <br />
+
+  <center>
+    <div class="author-block">
+      <b>Anonymous Authors</b>
+    </div>
+  </center>
+
+  <center>
+    <br />
+    <h2 class="tldr-section">
+      <b>TL;DR:</b>&nbsp; HAMLET is a scalable framework that enables pre-trained VLAs to leverage historical information without costly retraining from scratch.
+    </h2>
+    <br />
+    <div class="image-container">
+      <img id="teaser-image" src="resources/1_teaser.png" alt="Project Teaser" />
+    </div>
+  </center>
+
+  <!-- Abstract -->
+  <div class="docs-section" id="abstract">
+    <center>
+      <h1 class="navbar-heading"><b>Abstract</b></h1>
+    </center>
+    <div class="text-container">
+      <p>
+        We introduce <span class="task-label">HAMLET</span>, a history-aware fine-tuning framework for Vision-Language-Action (VLA) models that augments pre-trained policies with temporal memory while preserving their existing competencies. HAMLET summarizes instantaneous vision-language representations at each timestep into <span class="task-label"><i>moment tokens</i></span> and consolidates them through a lightweight <span class="task-label"><i>memory module</i></span> to form a temporally informed condition for action prediction. This design delivers strong gains on long-horizon, history-dependent manipulation tasks without retraining from scratch.
+      </p>
+    </div>
+  </div>
+
+  <!-- Method / Overview -->
+  <div class="docs-section" id="method">
+    <center>
+      <h1 class="navbar-heading"><b>Method</b></h1>
+    </center>
+
+    <div class="text-container">
+      <p>
+        <span class="task-label">HAMLET</span> is a fine-tuning framework for VLAs that introduces <b><span class="task-label">H</span>istory-<span class="task-label">A</span>ware <span class="task-label">M</span>emory with <span class="task-label">LE</span>arned <span class="task-label">T</span>okens</b>. 
+        <br>
+        The framework has two components: (a) <span class="task-label"><i>moment tokens</i></span>, which summarize instantaneous VLM representations at each timestep, and (b) a <span class="task-label"><i>memory module</i></span> that aggregates moment tokens across timesteps to provide a temporally informed context for action prediction.
+      </p>
+    </div>
+
+    <div class="image-container">
+      <img id="overview-image" src="resources/2_overview.png" alt="HAMLET Overview Diagram" />
+    </div>
+
+    <div class="text-container">
+      <p>
+        The moment tokens are appended to the VLM input at each timestep and initialized with time-contrastive learning, which encourages distinctiveness across timesteps.
+        Building on this, we incorporate a lightweight memory module that stores and integrates moment token representations across timesteps.
+      </p>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div class="docs-section" id="results">
+    <center>
+      <h1 class="navbar-heading"><b>Results</b></h1>
+    </center>
+
+    <div class="text-container">
+      <p>We present several real-robot demonstrations for each real-world task.</p>
+    </div>
+
+    <div class="task-block" id="task-1">
+      <h2 class="task-callout"><span class="task-badge">Task</span> Pick-and-Place Twice</h2>
+      <p class="instruction">
+        <span class="instruction-label">Instruction</span>
+        "Pick up the cube and place it on the opposite side, and then return it to the original side."
+      </p>
+
+      <h3>[Cube on the left]</h3>
+      <div class="video-grid" aria-label="Task 1-a">
+        <div class="video-item">
+          <video src="videos/1a_demo_2.mp4" playsinline muted loop controls preload="metadata" poster="thumbnails/1a_demo_2.jpg"></video>
+          <div class="video-caption">GR00T N1.5 (Failure #1)</div>
+        </div>
+        <div class="video-item">
+          <video src="videos/1a_demo_3.mp4" playsinline muted loop controls preload="metadata" poster="thumbnails/1a_demo_3.jpg"></video>
+          <div class="video-caption">GR00T N1.5 (Failure #2)</div>
+        </div>
+        <div class="video-item">
+          <video src="videos/1a_demo_1.mp4" playsinline muted loop controls preload="metadata" poster="thumbnails/1a_demo_1.jpg"></video>
+          <div class="video-caption">GR00T N1.5 + HAMLET (Success)</div>
+        </div>
+      </div>
+
+      <h3>[Cube on the right]</h3>
+      <div class="video-grid" aria-label="Task 1-b">
+        <div class="video-item">
+          <video src="videos/1b_demo_2.mp4" playsinline muted loop controls preload="metadata" poster="thumbnails/1b_demo_2.jpg"></video>
+          <div class="video-caption">GR00T N1.5 (Failure #1)</div>
+        </div>
+        <div class="video-item">
+          <video src="videos/1b_demo_3.mp4" playsinline muted loop controls preload="metadata" poster="thumbnails/1b_demo_3.jpg"></video>
+          <div class="video-caption">GR00T N1.5 (Failure #2)</div>
+        </div>
+        <div class="video-item">
+          <video src="videos/1b_demo_1.mp4" playsinline muted loop controls preload="metadata" poster="thumbnails/1b_demo_1.jpg"></video>
+          <div class="video-caption">GR00T N1.5 + HAMLET (Success)</div>
+        </div>
+      </div>
+    </div>
+
+    <br />
+
+    <div class="task-block" id="task-2">
+      <h2 class="task-callout"><span class="task-badge">Task</span> Cover-and-Stack</h2>
+      <p class="instruction">
+        <span class="instruction-label">Instruction</span>
+        "Cover the cube with the nearest cup, then stack the other cup on top of it."
+      </p>
+
+      <h3>[Cube near the left cup]</h3>
+      <div class="video-grid" aria-label="Task 2-a">
+        <div class="video-item">
+          <video src="videos/2a_demo_2.mp4" playsinline muted loop controls preload="metadata" poster="thumbnails/2a_demo_2.jpg"></video>
+          <div class="video-caption">GR00T N1.5 (Failure #1)</div>
+        </div>
+        <div class="video-item">
+          <video src="videos/2a_demo_3.mp4" playsinline muted loop controls preload="metadata" poster="thumbnails/2a_demo_3.jpg"></video>
+          <div class="video-caption">GR00T N1.5 (Failure #2)</div>
+        </div>
+        <div class="video-item">
+          <video src="videos/2a_demo_1.mp4" playsinline muted loop controls preload="metadata" poster="thumbnails/2a_demo_1.jpg"></video>
+          <div class="video-caption">GR00T N1.5 + HAMLET (Success)</div>
+        </div>
+      </div>
+
+      <h3>[Cube near the right cup]</h3>
+      <div class="video-grid" aria-label="Task 2-b">
+        <div class="video-item">
+          <video src="videos/2b_demo_2.mp4" playsinline muted loop controls preload="metadata" poster="thumbnails/2b_demo_2.jpg"></video>
+          <div class="video-caption">GR00T N1.5 (Failure #1)</div>
+        </div>
+        <div class="video-item">
+          <video src="videos/2b_demo_3.mp4" playsinline muted loop controls preload="metadata" poster="thumbnails/2b_demo_3.jpg"></video>
+          <div class="video-caption">GR00T N1.5 (Failure #2)</div>
+        </div>
+        <div class="video-item">
+          <video src="videos/2b_demo_1.mp4" playsinline muted loop controls preload="metadata" poster="thumbnails/2b_demo_1.jpg"></video>
+          <div class="video-caption">GR00T N1.5 + HAMLET (Success)</div>
+        </div>
+      </div>
+    </div>
+
+    <br />
+
+    <div class="task-block" id="task-3">
+      <h2 class="task-callout"><span class="task-badge">Task</span> Swap Cubes</h2>
+      <p class="instruction">
+        <span class="instruction-label">Instruction</span>
+        "Swap the positions of two cubes, starting with the blue one."
+      </p>
+
+      <h3>[Blue cube on the left]</h3>
+      <div class="video-grid" aria-label="Task 3-a">
+        <div class="video-item">
+          <video src="videos/3a_demo_2.mp4" playsinline muted loop controls preload="metadata" poster="thumbnails/3a_demo_2.jpg"></video>
+          <div class="video-caption">GR00T N1.5 (Failure #1)</div>
+        </div>
+        <div class="video-item">
+          <video src="videos/3a_demo_3.mp4" playsinline muted loop controls preload="metadata" poster="thumbnails/3a_demo_3.jpg"></video>
+          <div class="video-caption">GR00T N1.5 (Failure #2)</div>
+        </div>
+        <div class="video-item">
+          <video src="videos/3a_demo_1.mp4" playsinline muted loop controls preload="metadata" poster="thumbnails/3a_demo_1.jpg"></video>
+          <div class="video-caption">GR00T N1.5 + HAMLET (Success)</div>
+        </div>
+      </div>
+
+      <h3>[Blue cube on the right]</h3>
+      <div class="video-grid" aria-label="Task 3-b">
+        <div class="video-item">
+          <video src="videos/3b_demo_2.mp4" playsinline muted loop controls preload="metadata" poster="thumbnails/3b_demo_2.jpg"></video>
+          <div class="video-caption">GR00T N1.5 (Failure #1)</div>
+        </div>
+        <div class="video-item">
+          <video src="videos/3b_demo_3.mp4" playsinline muted loop controls preload="metadata" poster="thumbnails/3b_demo_3.jpg"></video>
+          <div class="video-caption">GR00T N1.5 (Failure #2)</div>
+        </div>
+        <div class="video-item">
+          <video src="videos/3b_demo_1.mp4" playsinline muted loop controls preload="metadata" poster="thumbnails/3b_demo_1.jpg"></video>
+          <div class="video-caption">GR00T N1.5 + HAMLET (Success)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Typical failure cases -->
+    <div class="task-block" id="failures">
+      <h2 class="task-callout">Typical failure cases for naïve multi-frame baseline</h2>
+
+      <div class="video-grid" aria-label="Failures by task">
+        <div class="video-item">
+          <video src="videos/multi_failure1.mp4"
+                playsinline muted loop controls preload="metadata"
+                poster="thumbnails/multi_failure1.jpg"></video>
+          <div class="video-caption">Task #1: Pick-and-Place Twice</div>
+        </div>
+        <div class="video-item">
+          <video src="videos/multi_failure2.mp4"
+                playsinline muted loop controls preload="metadata"
+                poster="thumbnails/multi_failure2.jpg"></video>
+          <div class="video-caption">Task #2: Cover-and-Stack</div>
+        </div>
+        <div class="video-item">
+          <video src="videos/multi_failure3.mp4"
+                playsinline muted loop controls preload="metadata"
+                poster="thumbnails/multi_failure3.jpg"></video>
+          <div class="video-caption">Task #3: Swap Cubes</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <br /><br /><br /><br />
+</body>
+</html>

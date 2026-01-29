@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TactileVLA: Anonymous Project Page</title>
+  <meta property="og:title" content="TactileVLA: Anonymous Project Page" />
+  <meta property="og:description" content="Project description placeholder." />
+
+  <!-- Fonts and Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href='https://fonts.googleapis.com/css?family=Titillium+Web:400,600,400italic,600italic,300,300italic' rel='stylesheet' type='text/css'>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
+  <!-- Main stylesheet -->
+  <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+  <br /><br /><br />
+  <center>
+    <span class="header-text">
+        PS-VLA: Physical Sensing Vision-Language-Action Models via Decoupled Modality Streams
+    </span>
+  </center>
+
+  <br />
+
+  <center>
+    <div class="author-block">
+      <b>Anonymous Authors</b>
+    </div>
+  </center>
+
+  <center>
+    <br />
+    <h2 class="tldr-section">
+      <b>TL;DR:</b>&nbsp; PS-VLA enables Vision-Language-Action models to jointly leverage multiple physical sensing modalities via decoupled streams and stable training, yielding synergistic gains on real-world contact-rich manipulation.
+    </h2>
+    <br />
+    <div class="image-container">
+      <img id="teaser-image" src="resources/1_teaser.png" alt="Project Teaser" />
+    </div>
+  </center>
+
+  <!-- Abstract -->
+  <div class="docs-section" id="abstract">
+    <center>
+      <h1 class="navbar-heading"><b>Abstract</b></h1>
+    </center>
+    <div class="text-container">
+      <p>
+        Humans understand and interact with the real world by relying on diverse physical feedback, beyond visual perception alone.
+        Motivated by this, recent approaches attempt to incorporate physical sensory signals into Vision-Language-Action models (VLAs).
+        However, they typically focus on a single type of physical signal, failing to capture the heterogeneous and complementary nature of real-world interactions.
+        In this paper, we propose <span class="task-label">PS-VLA</span>, a modular framework that adapts VLAs to leverage multiple sensory signals for action prediction.
+        Specifically, we introduce <span class="task-label">decoupled modality streams</span> that integrate heterogeneous physical signals into the action stream via <span class="task-label">joint cross-modal self-attention</span>.
+        To enable stable incorporation of new modalities, we adopt a <span class="task-label"></span>two-stage training scheme</span> that freezes pretrained VLA parameters in the early stage.
+        Furthermore, to better capture contact interaction dynamics, we incorporate an auxiliary task that <span class="task-label">predicts future physical signals</span>.
+        Through extensive real-world experiments, we demonstrate that PS-VLA successfully augments VLAs to leverage diverse physical signals (i.e., tactile, force, and torque), integrating multiple signals to achieve synergistic performance gains.
+      </p>
+    </div>
+  </div>
+
+  <!-- Method / Overview -->
+  <div class="docs-section" id="method">
+    <center>
+      <h1 class="navbar-heading"><b>Method</b></h1>
+    </center>
+
+    <div class="text-container">
+        <p>
+            <span class="task-label">PS-VLA</span> is a modular adaptation framework for Vision-Language-Action models that enables scalable integration of multiple physical sensing modalities for contact-rich manipulation.
+            The framework has two core components:
+            (a) <span class="task-label">decoupled modality streams</span>, which process each physical signal (e.g., tactile, force, or torque) in parallel and inject them into the pretrained action expert via <span class="task-label">joint cross-modal self-attention</span>, and
+            (b) a <span class="task-label">two-stage training scheme</span>, which first aligns the physical streams with the frozen pretrained VLA and then jointly fine-tunes all components for coordinated control.
+            In addition, an auxiliary <span class="task-label">future physical-signal prediction objective</span> encourages the model to internalize contact dynamics, allowing heterogeneous sensory inputs to be combined in a synergistic and scalable manner.
+        </p>
+    </div>
+
+    <div class="image-container">
+      <img id="overview-image" src="resources/2_overview.png" alt="Method Overview Diagram" />
+    </div>
+
+    <!-- <div class="text-container">
+      <p>
+        [Additional method details placeholder] The framework enables robust manipulation in scenarios where visual information alone is insufficient, such as handling deformable objects or performing precise insertion tasks.
+      </p>
+    </div> -->
+  </div>
+
+  <!-- Results -->
+  <div class="docs-section" id="results">
+    <center>
+      <h1 class="navbar-heading"><b>Results</b></h1>
+    </center>
+
+    <div class="text-container">
+      <p>We present real-robot demonstrations for each task. Use the dropdown menu to select different task variants.</p>
+    </div>
+
+    <!-- Task A: Unstack Cup -->
+    <div class="task-block" id="task-a">
+      <h2 class="task-callout"><span class="task-badge">Task A</span> Unstack Cup</h2>
+      <p class="instruction">
+        <span class="instruction-label">Instruction</span>
+        "Pick up the top red cup from the stack and place it next to the blue cup."
+      </p>
+
+      <div class="variant-selector">
+        <label for="task-a-select">Select Variant:</label>
+        <select id="task-a-select" onchange="switchVariant('task-a', this.value)">
+          <option value="small">Small Cup</option>
+          <option value="large">Large Cup</option>
+        </select>
+      </div>
+
+      <!-- Small variant -->
+      <div class="video-container active" id="task-a-small">
+        <div class="video-grid">
+          <div class="video-item">
+            <video src="videos/unstack_cup_small_failure.mp4" playsinline muted loop controls preload="metadata"></video>
+            <div class="video-caption video-label-failure">GR00T N1.5 (Failure)</div>
+          </div>
+          <div class="video-item">
+            <video src="videos/unstack_cup_small_success.mp4" playsinline muted loop controls preload="metadata"></video>
+            <div class="video-caption video-label-success">GR00T N1.5 + PS-VLA (Ours; Success)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Large variant -->
+      <div class="video-container" id="task-a-large">
+        <div class="video-grid">
+          <div class="video-item">
+            <video src="videos/unstack_cup_large_failure.mp4" playsinline muted loop controls preload="metadata"></video>
+            <div class="video-caption video-label-failure">GR00T N1.5 (Failure)</div>
+          </div>
+          <div class="video-item">
+            <video src="videos/unstack_cup_large_success.mp4" playsinline muted loop controls preload="metadata"></video>
+            <div class="video-caption video-label-success">GR00T N1.5 + PS-VLA (Ours; Success)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Task B: PnP Egg -->
+    <div class="task-block" id="task-b">
+      <h2 class="task-callout"><span class="task-badge">Task B</span> PnP Egg</h2>
+      <p class="instruction">
+        <span class="instruction-label">Instruction</span>
+        "Pick up the egg and place it in the gold bowl."
+      </p>
+
+      <div class="variant-selector">
+        <label for="task-b-select">Select Variant:</label>
+        <select id="task-b-select" onchange="switchVariant('task-b', this.value)">
+          <option value="random">Random Position</option>
+        </select>
+      </div>
+
+      <!-- Random position variant -->
+      <div class="video-container active" id="task-b-random">
+        <div class="video-grid">
+          <div class="video-item">
+            <video src="videos/pnp_egg_failure.mp4" playsinline muted loop controls preload="metadata"></video>
+            <div class="video-caption video-label-failure">GR00T N1.5 (Failure)</div>
+          </div>
+          <div class="video-item">
+            <video src="videos/pnp_egg_success.mp4" playsinline muted loop controls preload="metadata"></video>
+            <div class="video-caption video-label-success">GR00T N1.5 + PS-VLA (Ours; Success)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Task C: Board Erase -->
+    <div class="task-block" id="task-c">
+      <h2 class="task-callout"><span class="task-badge">Task C</span> Board Erase</h2>
+      <p class="instruction">
+        <span class="instruction-label">Instruction</span>
+        "Use the (red/grey) eraser to clean the whiteboard."
+      </p>
+
+      <div class="variant-selector">
+        <label for="task-c-select">Select Variant:</label>
+        <select id="task-c-select" onchange="switchVariant('task-c', this.value)">
+          <option value="high">High Position</option>
+          <option value="low">Low Position</option>
+        </select>
+      </div>
+
+      <!-- High variant -->
+      <div class="video-container active" id="task-c-high">
+        <div class="video-grid">
+          <div class="video-item">
+            <video src="videos/board_erase_high_failure.mp4" playsinline muted loop controls preload="metadata"></video>
+            <div class="video-caption video-label-failure">GR00T N1.5 (Failure)</div>
+          </div>
+          <div class="video-item">
+            <video src="videos/board_erase_high_success.mp4" playsinline muted loop controls preload="metadata"></video>
+            <div class="video-caption video-label-success">GR00T N1.5 + PS-VLA (Ours; Success)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Low variant -->
+      <div class="video-container" id="task-c-low">
+        <div class="video-grid">
+          <div class="video-item">
+            <video src="videos/board_erase_low_failure.mp4" playsinline muted loop controls preload="metadata"></video>
+            <div class="video-caption video-label-failure">GR00T N1.5 (Failure)</div>
+          </div>
+          <div class="video-item">
+            <video src="videos/board_erase_low_success.mp4" playsinline muted loop controls preload="metadata"></video>
+            <div class="video-caption video-label-success">GR00T N1.5 + PS-VLA (Ours; Success)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Task D: Plug Insertion -->
+    <div class="task-block" id="task-d">
+      <h2 class="task-callout"><span class="task-badge">Task D</span> Plug Insertion</h2>
+      <p class="instruction">
+        <span class="instruction-label">Instruction</span>
+        "Pick up the (yellow/white/black) charger and plug it into the socket."
+      </p>
+
+      <div class="variant-selector">
+        <label for="task-d-select">Select Variant:</label>
+        <select id="task-d-select" onchange="switchVariant('task-d', this.value)">
+          <option value="white">White Plug</option>
+          <option value="yellow">Yellow Plug</option>
+          <option value="black">Black Plug</option>
+        </select>
+      </div>
+
+      <!-- White variant -->
+      <div class="video-container active" id="task-d-white">
+        <div class="video-grid">
+          <div class="video-item">
+            <video src="videos/plug_insertion_white_failure.mp4" playsinline muted loop controls preload="metadata"></video>
+            <div class="video-caption video-label-failure">GR00T N1.5 (Failure)</div>
+          </div>
+          <div class="video-item">
+            <video src="videos/plug_insertion_white_success.mp4" playsinline muted loop controls preload="metadata"></video>
+            <div class="video-caption video-label-success">GR00T N1.5 + PS-VLA (Ours; Success)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Yellow variant -->
+      <div class="video-container" id="task-d-yellow">
+        <div class="video-grid">
+          <div class="video-item">
+            <video src="videos/plug_insertion_yellow_failure.mp4" playsinline muted loop controls preload="metadata"></video>
+            <div class="video-caption video-label-failure">GR00T N1.5 (Failure)</div>
+          </div>
+          <div class="video-item">
+            <video src="videos/plug_insertion_yellow_success.mp4" playsinline muted loop controls preload="metadata"></video>
+            <div class="video-caption video-label-success">GR00T N1.5 + PS-VLA (Ours; Success)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Black variant -->
+      <div class="video-container" id="task-d-black">
+        <div class="video-grid">
+          <div class="video-item">
+            <video src="videos/plug_insertion_black_failure.mp4" playsinline muted loop controls preload="metadata"></video>
+            <div class="video-caption video-label-failure">GR00T N1.5 (Failure)</div>
+          </div>
+          <div class="video-item">
+            <video src="videos/plug_insertion_black_success.mp4" playsinline muted loop controls preload="metadata"></video>
+            <div class="video-caption video-label-success">GR00T N1.5 + PS-VLA (Ours; Success)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <br /><br /><br /><br />
+
+  <!-- JavaScript for dropdown switching -->
+  <script>
+    function switchVariant(taskId, variantValue) {
+      // Hide all video containers for this task
+      const taskBlock = document.getElementById(taskId);
+      const containers = taskBlock.querySelectorAll('.video-container');
+      containers.forEach(container => {
+        container.classList.remove('active');
+        // Pause all videos when hiding
+        const videos = container.querySelectorAll('video');
+        videos.forEach(video => video.pause());
+      });
+
+      // Show the selected variant
+      const selectedContainer = document.getElementById(taskId + '-' + variantValue);
+      if (selectedContainer) {
+        selectedContainer.classList.add('active');
+      }
+    }
+
+    // Initialize: ensure first option is selected for each task
+    document.addEventListener('DOMContentLoaded', function() {
+      const selects = document.querySelectorAll('.variant-selector select');
+      selects.forEach(select => {
+        const taskId = select.id.replace('-select', '');
+        switchVariant(taskId, select.value);
+      });
+    });
+  </script>
+</body>
+</html>

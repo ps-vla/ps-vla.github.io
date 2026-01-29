@@ -1,0 +1,413 @@
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+
+/* General Body Styles */
+body {
+    font-family: "Titillium Web", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    margin: 0 auto;
+    max-width: 90%;
+    padding: 0 20px;
+    color: #666;
+}
+
+h1 {
+    color: #000;
+    font-size: 40px;
+}
+
+h2 {
+    color: #444;
+    font-size: 35px;
+}
+
+h3 {
+    color: #444;
+    font-size: 30px;
+}
+
+h1, h2, h3 {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 300;
+}
+
+p {
+    margin-bottom: 0.75rem;
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+}
+
+.disclaimerbox {
+    background-color: #eee;
+    border: 1px solid #eeeeee;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+img.header-img, img.rounded {
+    border: 1px solid #eeeeee;
+    border-radius: 10px;
+}
+
+a:link,
+a:visited {
+    color: #1367a7;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #208799;
+}
+
+.paper-btn {
+    position: relative;
+    text-align: center;
+    display: inline-block;
+    margin: 8px;
+    padding: 8px 8px;
+    border-width: 0;
+    outline: none;
+    border-radius: 2px;
+    color: #3b66a7 !important;
+    font-size: 20px;
+    width: 100px;
+    font-weight: 600;
+}
+
+.paper-btn:hover {
+    opacity: 0.85;
+}
+
+.paper-btn-parent {
+    display: flex;
+    justify-content: center;
+    margin: 16px 0px;
+}
+
+/* Layout Container */
+.container {
+    margin: 0 auto;
+    padding: 0 20px;
+    max-width: 1400px;
+}
+
+/* Header Text */
+.header-text {
+    display: inline-block;
+    max-width: 100%;
+    padding: 0 1rem;
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    color: #000;
+    word-wrap: break-word;
+}
+
+/* Navbar Heading */
+.navbar-heading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    background-color: #d6e2f6;  /* #d6e2f6 */
+    font-size: 2rem;
+    text-align: center;
+    color: #000;
+}
+
+/* Docs Section */
+.docs-section {
+    margin: 2.5rem auto;
+    padding: 1rem;
+    max-width: 1400px;
+    background-color: #f9f9f9;
+    border-radius: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: justify;
+}
+
+/* Text Container for Problem Statement, Overview */
+.text-container {
+    padding: 0 1rem;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #555;
+    text-align: justify;
+}
+
+/* Constrain Teaser Image Width */
+#overview-image {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Image Container */
+.image-container {
+    margin: 2rem auto;
+    max-width: 1400px;
+}
+
+.image-container img {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Carousel Styles */
+.carousel-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin: auto;
+}
+
+.carousel-images {
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    width: 100%;
+}
+
+.carousel-image {
+    display: none;
+    width: 95%;
+    object-fit: contain;
+}
+
+.carousel-image.active {
+    display: block;
+}
+
+.carousel-arrow {
+    position: absolute;
+    top: 50%;
+    z-index: 10;
+    padding: 10px;
+    background: none;
+    color: black;
+    font-size: 3rem;
+    border: none;
+    cursor: pointer;
+    transform: translateY(-100%);
+    transition: color 0.3s, transform 0.2s;
+}
+
+.carousel-arrow:hover {
+    color: #208799;
+    transform: translateY(-100%) scale(1.1);
+}
+
+.left-arrow {
+    left: -10px;
+}
+
+.right-arrow {
+    right: -10px;
+}
+
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+}
+
+.carousel-dot {
+    width: 15px;
+    height: 15px;
+    margin: 0 5px;
+    border-radius: 50%;
+    background-color: gray;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.carousel-dot.active {
+    background-color: black;
+}
+
+/* Author Block */
+.author-block {
+    font-family: 'Times New Roman', serif;
+    font-size: 20px;
+}
+
+/* TL;DR Section */
+.tldr-section {
+    font-size: 16px;
+    font-weight: bold;
+    color: #444;
+}
+
+/* Instruction callout */
+.instruction {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 14px 0 20px;
+  padding: 12px 14px;
+  background: #fff8e1;
+  border: 1px solid #ffe0b2;
+  border-left: 6px solid #f4b400;
+  border-radius: 10px;
+  color: #333;
+  line-height: 1.55;
+  font-size: 2rem;
+}
+
+.instruction .material-icons {
+  font-size: 28px;
+  line-height: 1;
+  color: #b98500;
+  flex: 0 0 auto;
+  margin-top: 2px;
+}
+
+.instruction .instruction-label {
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: #ffe082;
+  color: #5a4100;
+  letter-spacing: 0.2px;
+  margin-right: 6px;
+}
+
+.task-label { font-weight: 700; }
+
+/* Responsive Design */
+
+/* Medium Screens (Tablets) */
+@media screen and (max-width: 768px) {
+    body {
+        font-size: 1rem;
+    }
+
+    h2 {
+        font-size: 0.9rem;
+    }
+
+    h3 {
+        font-size: 0.8rem;
+    }
+
+    .header-text {
+        font-size: 1.2rem;
+    }
+
+    .navbar-heading {
+        font-size: 1.1rem;
+    }
+
+    .docs-section {
+        padding: 1rem;
+    }
+
+    .text-container {
+        padding: 0.5rem;
+        font-size: 1rem;
+    }
+
+    .carousel-arrow {
+        font-size: 1.7rem;
+    }
+
+    .left-arrow {
+        left: -20px;
+    }
+    
+    .right-arrow {
+        right: -20px;
+    }
+
+    .carousel-dot {
+        width: 12px;
+        height: 12px;
+    }
+
+    .image-container {
+        margin: 0.7rem auto;
+    }
+
+    .author-block {
+        font-size: 18px;
+    }
+    
+    .tldr-section {
+        font-size: 15px;
+    }
+}
+
+/* Small Screens (Mobile) */
+@media screen and (max-width: 480px) {
+    body {
+        font-size: 1rem;
+    }
+
+    h2 {
+        font-size: 0.9rem;
+    }
+
+    h3 {
+        font-size: 0.8rem;
+    }
+
+    .header-text {
+        font-size: 1rem;
+        max-width: 100%;
+    }
+
+    .navbar-heading {
+        font-size: 1.4rem;
+    }
+
+    .docs-section {
+        padding: 1rem;
+    }
+
+    .text-container {
+        font-size: 1rem;
+    }
+
+    .carousel-arrow {
+        font-size: 1.5rem;
+    }
+
+    .left-arrow {
+        left: -25px;
+    }
+    
+    .right-arrow {
+        right: -25px;
+    }
+
+    .carousel-dot {
+        width: 10px;
+        height: 10px;
+    }
+
+    .image-container {
+        margin: 0.5rem auto;
+    }
+
+    .author-block {
+        font-size: 16px;
+    }
+    
+    .tldr-section {
+        font-size: 14px;
+    }
+}
